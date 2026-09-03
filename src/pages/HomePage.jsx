@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { assetUrl } from '../assetUrl'
 import ArrowIcon from '../components/ArrowIcon'
 import { artworks } from '../data/artworks'
 import { Link } from '../router'
@@ -105,7 +106,7 @@ export default function HomePage() {
             alt="Detalle de Marea interior, figura femenina sobre un flujo de agua y luz"
             className="cinematic-cutout"
             fetchPriority="high"
-            src="/hero/marea-cutout.png"
+            src={assetUrl('/hero/marea-cutout.png')}
           />
 
           <div className="cinematic-controls" aria-label="Controles de la animación">

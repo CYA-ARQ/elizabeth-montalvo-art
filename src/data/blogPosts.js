@@ -1,3 +1,5 @@
+import { assetUrl } from '../assetUrl'
+
 export const BLOG_STORAGE_KEY = 'elizabeth-montalvo:blog-notes:v1'
 
 export const initialBlogPosts = [
@@ -6,7 +8,7 @@ export const initialBlogPosts = [
     title: 'La memoria del agua',
     category: 'Proceso',
     date: '2026-05-18',
-    cover: '/artworks/marea-interior.png',
+    cover: assetUrl('/artworks/marea-interior.png'),
     excerpt:
       'El agua no solo fluye: recuerda. En esta serie se vuelve testigo, piel y archivo de lo que fuimos.',
     body:
@@ -17,7 +19,7 @@ export const initialBlogPosts = [
     title: 'Apuntes sobre el color',
     category: 'Reflexiones',
     date: '2026-04-02',
-    cover: '/artworks/el-origen.png',
+    cover: assetUrl('/artworks/el-origen.png'),
     excerpt:
       'Pensamientos sueltos sobre cómo el color transforma la forma, el ánimo y la memoria.',
     body:
@@ -28,7 +30,7 @@ export const initialBlogPosts = [
     title: 'Lo que queda en el papel',
     category: 'Cuaderno',
     date: '2026-02-12',
-    cover: '/artworks/el-vuelo.png',
+    cover: assetUrl('/artworks/el-vuelo.png'),
     excerpt:
       'Dibujos, palabras y manchas: el papel como territorio de juego y de preguntas sin respuesta.',
     body:

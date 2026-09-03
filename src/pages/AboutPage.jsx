@@ -1,4 +1,5 @@
 import ArrowIcon from '../components/ArrowIcon'
+import { assetUrl } from '../assetUrl'
 import { Link } from '../router'
 
 export default function AboutPage() {
@@ -9,7 +10,7 @@ export default function AboutPage() {
           <img
             alt="Retrato de la artista Elizabeth Montalvo"
             fetchPriority="high"
-            src="/about/elizabeth-montalvo.jpg"
+            src={assetUrl('/about/elizabeth-montalvo.jpg')}
           />
         </figure>
         <div className="about-copy reveal reveal--delay">

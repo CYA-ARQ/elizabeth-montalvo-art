@@ -1,3 +1,4 @@
+import { assetUrl } from '../assetUrl'
 import { Link } from '../router'
 
 export default function Footer() {
@@ -5,7 +6,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-brand">
         <Link className="footer-lockup" to="/">
-          <img src="/brand/logo-elizabeth-montalvo.png" alt="" />
+          <img src={assetUrl('/brand/logo-elizabeth-montalvo.png')} alt="" />
           <span>Elizabeth Montalvo</span>
         </Link>
         <p>Pintura figurativa · Técnica mixta</p>

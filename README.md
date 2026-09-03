@@ -3,6 +3,10 @@
 Portafolio editorial y responsive desarrollado con React + Vite. Incluye Inicio,
 Sobre mí, Galería, Blog y Contacto.
 
+## Sitio publicado
+
+[Ver el portafolio de Elizabeth Montalvo](https://cya-arq.github.io/elizabeth-montalvo-art/)
+
 ## Funcionalidades
 
 - Hero animado con transición horizontal entre pinturas y control de reproducción.

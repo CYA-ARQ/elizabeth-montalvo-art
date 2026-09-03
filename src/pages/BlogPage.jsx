@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { assetUrl } from '../assetUrl'
 import ArrowIcon from '../components/ArrowIcon'
 import { BLOG_STORAGE_KEY, initialBlogPosts } from '../data/blogPosts'
 
@@ -112,7 +113,7 @@ export default function BlogPage() {
       title,
       category,
       date: new Date().toISOString().slice(0, 10),
-      cover: coverPreview || '/artworks/marea-interior.png',
+      cover: coverPreview || assetUrl('/artworks/marea-interior.png'),
       excerpt: body.length > 145 ? `${body.slice(0, 142).trim()}…` : body,
       body,
     }

@@ -1,11 +1,22 @@
 import { useSyncExternalStore } from 'react'
 
+const useHashRouting = import.meta.env.PROD && import.meta.env.BASE_URL !== '/'
+
 function subscribe(callback) {
   window.addEventListener('popstate', callback)
-  return () => window.removeEventListener('popstate', callback)
+  window.addEventListener('hashchange', callback)
+  return () => {
+    window.removeEventListener('popstate', callback)
+    window.removeEventListener('hashchange', callback)
+  }
 }
 
 function getSnapshot() {
+  if (useHashRouting) {
+    const hashPath = window.location.hash.slice(1)
+    return hashPath.startsWith('/') ? hashPath : '/'
+  }
+
   return window.location.pathname
 }
 
@@ -14,12 +25,19 @@ export function usePathname() {
 }
 
 function navigate(to) {
+  if (useHashRouting) {
+    if (getSnapshot() !== to) window.location.hash = to
+    return
+  }
+
   if (window.location.pathname === to) return
   window.history.pushState({}, '', to)
   window.dispatchEvent(new PopStateEvent('popstate'))
 }
 
 export function Link({ children, onClick, to, ...props }) {
+  const href = useHashRouting ? `${import.meta.env.BASE_URL}#${to}` : to
+
   const handleClick = (event) => {
     onClick?.(event)
     if (
@@ -38,7 +56,7 @@ export function Link({ children, onClick, to, ...props }) {
   }
 
   return (
-    <a href={to} onClick={handleClick} {...props}>
+    <a href={href} onClick={handleClick} {...props}>
       {children}
     </a>
   )

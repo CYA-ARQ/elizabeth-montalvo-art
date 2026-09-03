@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { assetUrl } from '../assetUrl'
 import { NavLink, usePathname } from '../router'
 
 const links = [
@@ -37,8 +38,8 @@ export default function Header({ compact = false, dark = false }) {
           className="brand-logo"
           src={
             dark
-              ? '/brand/logo-elizabeth-montalvo-white.png'
-              : '/brand/logo-elizabeth-montalvo.png'
+              ? assetUrl('/brand/logo-elizabeth-montalvo-white.png')
+              : assetUrl('/brand/logo-elizabeth-montalvo.png')
           }
           alt=""
         />
