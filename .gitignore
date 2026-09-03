@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.tools-ffmpeg/
+.DS_Store
+*.log
+
+# Recursos reemplazados o no utilizados
+public/about/elizabeth-montalvo.png
+public/hero/paintings-loop.mp4
