@@ -30,7 +30,7 @@ function App() {
   const pathname = usePathname()
   const Page = pages[pathname] ?? HomePage
   const isHome = pathname === '/'
-  const hasCompactHeader = pathname === '/blog'
+  const hasCompactHeader = !isHome
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
