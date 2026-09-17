@@ -8,20 +8,25 @@ export default function AboutPage() {
       <section className="about-hero">
         <figure className="about-art reveal">
           <img
-            alt="Retrato de la artista Elizabeth Montalvo"
+            alt="Martha Montalvo pintando en su taller"
             fetchPriority="high"
-            src={assetUrl('/about/elizabeth-montalvo.jpg')}
+            src={assetUrl('/about/martha-montalvo-at-work.jpg')}
           />
         </figure>
         <div className="about-copy reveal reveal--delay">
-          <span className="about-monogram" aria-hidden="true">M</span>
+          <img
+            alt=""
+            aria-hidden="true"
+            className="about-watermark"
+            src={assetUrl('/brand/logo-elizabeth-montalvo.png')}
+          />
           <h1>Sobre mí</h1>
           <p className="about-lead">
             Pinto para escuchar lo que las palabras no alcanzan.
           </p>
           <div className="about-body">
             <p>
-              Soy Elizabeth Montalvo. Mi práctica artística nace de la observación
+              Soy Martha Montalvo. Mi práctica artística nace de la observación
               atenta de la vida cotidiana, la memoria y la naturaleza. Me interesa
               lo que permanece en silencio: gestos mínimos, miradas, texturas y
               luces que cambian sin avisar.
@@ -35,6 +40,12 @@ export default function AboutPage() {
           </div>
           <p className="practice-line">Pintura figurativa · Técnica mixta</p>
         </div>
+        <img
+          alt=""
+          aria-hidden="true"
+          className="about-kite"
+          src={assetUrl('/about/el-vuelo-kite.png')}
+        />
       </section>
 
       <section className="process-section section-pad">

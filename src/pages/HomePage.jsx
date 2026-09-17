@@ -8,6 +8,8 @@ const selectedWorks = artworks.filter((artwork) =>
   ['el-vuelo', 'ritual'].includes(artwork.id),
 )
 
+const heroSideDetail = artworks.find((artwork) => artwork.id === 'el-origen')
+
 const heroSlides = ['ritual', 'el-vuelo', 'el-origen', 'marea-interior'].map(
   (id) => artworks.find((artwork) => artwork.id === id),
 )
@@ -55,7 +57,7 @@ export default function HomePage() {
       <section className="cinematic-home" aria-labelledby="home-title">
         <div className="cinematic-stage reveal">
           <div
-            aria-label="Secuencia animada de pinturas de Elizabeth Montalvo"
+            aria-label="Secuencia animada de pinturas de Martha Montalvo"
             aria-roledescription="carrusel"
             className={`cinematic-media ${isPlaying ? '' : 'is-paused'}`}
             role="region"
@@ -85,17 +87,24 @@ export default function HomePage() {
             <span className="cinematic-media-label">PINTURAS EN MOVIMIENTO</span>
           </div>
 
+          <img
+            alt=""
+            aria-hidden="true"
+            className="cinematic-side-detail"
+            src={heroSideDetail.src}
+          />
+
           <div className="cinematic-copy">
-            <p className="art-index">ELIZABETH MONTALVO / OBRA EN MOVIMIENTO</p>
+            <p className="art-index">MARTHA MONTALVO / OBRA EN MOVIMIENTO</p>
             <h1
-              aria-label="Pinto lo que permanece cuando todo cambia."
+              aria-label="La pintura como expresión más allá de las palabras."
               id="home-title"
             >
-              <span>Pinto lo que permanece</span>
-              <span>cuando todo cambia.</span>
+              <span>La pintura como expresión</span>
+              <span>más allá de las palabras.</span>
             </h1>
             <p className="hero-lead">
-              Cuerpo, memoria y naturaleza en obras que habitan lo íntimo.
+              Cuerpo, memoria, inconsciente y naturaleza en obras que transmiten lo íntimo.
             </p>
             <Link className="text-link text-link--cinematic" to="/galeria">
               VER GALERÍA <ArrowIcon />

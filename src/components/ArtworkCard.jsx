@@ -1,6 +1,6 @@
 export default function ArtworkCard({ artwork, onOpen, priority = false }) {
   return (
-    <article className={`artwork-card artwork-card--${artwork.layout}`}>
+    <article className={`artwork-card artwork-card--${artwork.layout} artwork-card--${artwork.id}`}>
       <button
         aria-label={`Ampliar ${artwork.title}`}
         className="artwork-image-button"

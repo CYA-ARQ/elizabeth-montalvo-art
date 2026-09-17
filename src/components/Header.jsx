@@ -32,7 +32,7 @@ export default function Header({ compact = false, dark = false }) {
       <NavLink
         className="brand-lockup"
         to="/"
-        aria-label="Elizabeth Montalvo, ir al inicio"
+        aria-label="Martha Montalvo, ir al inicio"
       >
         <img
           className="brand-logo"
@@ -43,7 +43,7 @@ export default function Header({ compact = false, dark = false }) {
           }
           alt=""
         />
-        <span>Elizabeth Montalvo</span>
+        <span>Martha Montalvo</span>
       </NavLink>
 
       <button

@@ -19,11 +19,11 @@ const pages = {
 }
 
 const pageTitles = {
-  '/': 'Elizabeth Montalvo — Pintura contemporánea',
-  '/sobre-mi': 'Sobre mí — Elizabeth Montalvo',
-  '/galeria': 'Galería — Elizabeth Montalvo',
-  '/blog': 'Notas & memorias — Elizabeth Montalvo',
-  '/contacto': 'Contacto — Elizabeth Montalvo',
+  '/': 'Martha Montalvo — Pintura contemporánea',
+  '/sobre-mi': 'Sobre mí — Martha Montalvo',
+  '/galeria': 'Galería — Martha Montalvo',
+  '/blog': 'Notas & memorias — Martha Montalvo',
+  '/contacto': 'Contacto — Martha Montalvo',
 }
 
 function App() {

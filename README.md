@@ -1,17 +1,17 @@
-# Elizabeth Montalvo — Portafolio artístico
+# Martha Montalvo — Portafolio artístico
 
 Portafolio editorial y responsive desarrollado con React + Vite. Incluye Inicio,
 Sobre mí, Galería, Blog y Contacto.
 
 ## Sitio publicado
 
-[Ver el portafolio de Elizabeth Montalvo](https://cya-arq.github.io/elizabeth-montalvo-art/)
+[Ver el portafolio de Martha Montalvo](https://cya-arq.github.io/elizabeth-montalvo-art/)
 
 ## Funcionalidades
 
 - Hero animado con transición horizontal entre pinturas y control de reproducción.
 - Galería filtrable con visor de obra.
-- Biografía y retrato de Elizabeth Montalvo.
+- Biografía y retrato de Martha Montalvo.
 - Blog de notas y memorias con lectura en panel lateral.
 - Editor para crear notas, elegir categoría y adjuntar una portada.
 - Persistencia local de las notas creadas en el navegador.
@@ -48,5 +48,5 @@ Las pinturas están en `public/artworks/`, el retrato en `public/about/`, el log
 
 ## Autoría
 
-Obra visual y contenidos de Elizabeth Montalvo. Código del portafolio preparado
+Obra visual y contenidos de Martha Montalvo. Código del portafolio preparado
 para su publicación y personalización.

@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="footer-brand">
         <Link className="footer-lockup" to="/">
           <img src={assetUrl('/brand/logo-elizabeth-montalvo.png')} alt="" />
-          <span>Elizabeth Montalvo</span>
+          <span>Martha Montalvo</span>
         </Link>
         <p>Pintura figurativa · Técnica mixta</p>
       </div>
@@ -17,7 +17,7 @@ export default function Footer() {
         <Link to="/blog">Blog</Link>
         <Link to="/contacto">Contacto</Link>
       </div>
-      <p className="footer-meta">© {new Date().getFullYear()} Elizabeth Montalvo</p>
+      <p className="footer-meta">© {new Date().getFullYear()} Martha Montalvo</p>
     </footer>
   )
 }

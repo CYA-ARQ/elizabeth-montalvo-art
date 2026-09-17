@@ -1,6 +1,6 @@
 import { assetUrl } from '../assetUrl'
 
-export const BLOG_STORAGE_KEY = 'elizabeth-montalvo:blog-notes:v1'
+export const BLOG_STORAGE_KEY = 'martha-montalvo:blog-notes:v1'
 
 export const initialBlogPosts = [
   {
