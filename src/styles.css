@@ -413,22 +413,6 @@ blockquote {
   letter-spacing: 0.17em;
 }
 
-.cinematic-side-detail {
-  position: absolute;
-  z-index: 1;
-  top: 1.75rem;
-  bottom: 9.5rem;
-  left: 0;
-  width: clamp(92px, 13vw, 230px);
-  height: calc(100% - 11.25rem);
-  object-fit: cover;
-  object-position: 55% center;
-  opacity: 0.96;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 68%, transparent 100%);
-  mask-image: linear-gradient(90deg, #000 0%, #000 68%, transparent 100%);
-}
-
 .cinematic-copy {
   position: absolute;
   z-index: 4;
@@ -1954,10 +1938,6 @@ blockquote {
     left: 1.25rem;
     width: auto;
     height: 46%;
-  }
-
-  .cinematic-side-detail {
-    display: none;
   }
 
   .painting-slide img {

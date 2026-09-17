@@ -8,8 +8,6 @@ const selectedWorks = artworks.filter((artwork) =>
   ['el-vuelo', 'ritual'].includes(artwork.id),
 )
 
-const heroSideDetail = artworks.find((artwork) => artwork.id === 'el-origen')
-
 const heroSlides = ['ritual', 'el-vuelo', 'el-origen', 'marea-interior'].map(
   (id) => artworks.find((artwork) => artwork.id === id),
 )
@@ -86,13 +84,6 @@ export default function HomePage() {
             </div>
             <span className="cinematic-media-label">PINTURAS EN MOVIMIENTO</span>
           </div>
-
-          <img
-            alt=""
-            aria-hidden="true"
-            className="cinematic-side-detail"
-            src={heroSideDetail.src}
-          />
 
           <div className="cinematic-copy">
             <p className="art-index">MARTHA MONTALVO / OBRA EN MOVIMIENTO</p>
