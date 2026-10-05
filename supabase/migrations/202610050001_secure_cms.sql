@@ -96,6 +96,10 @@ create policy artworks_admin_update on public.artworks
   for update to authenticated
   using ((select public.is_portfolio_admin()))
   with check ((select public.is_portfolio_admin()));
+drop policy if exists artworks_admin_delete on public.artworks;
+create policy artworks_admin_delete on public.artworks
+  for delete to authenticated
+  using ((select public.is_portfolio_admin()));
 
 drop policy if exists blog_posts_public_read on public.blog_posts;
 create policy blog_posts_public_read on public.blog_posts
@@ -113,7 +117,8 @@ create policy blog_posts_admin_update on public.blog_posts
 revoke all on public.admin_users from anon, authenticated;
 grant select on public.admin_users to authenticated;
 grant select on public.site_content, public.artworks, public.blog_posts to anon, authenticated;
-grant insert, update on public.site_content, public.artworks, public.blog_posts to authenticated;
+grant insert, update on public.site_content, public.blog_posts to authenticated;
+grant insert, update, delete on public.artworks to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (

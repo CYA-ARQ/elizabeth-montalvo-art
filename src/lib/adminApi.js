@@ -38,16 +38,23 @@ export async function saveSiteContent(value) {
 export async function saveArtworkRecord(artwork) {
   const { error } = await supabase
     .from('artworks')
-    .update({
+    .upsert({
+      id: artwork.id,
       title: artwork.title,
       year: artwork.year,
       alt_text: artwork.alt_text,
       categories: artwork.categories,
       layout: artwork.layout,
       image_url: artwork.image_url,
+      published: artwork.published ?? true,
+      sort_order: artwork.sort_order,
       updated_at: new Date().toISOString(),
-    })
-    .eq('id', artwork.id)
+    }, { onConflict: 'id' })
+  if (error) throw error
+}
+
+export async function deleteArtworkRecord(id) {
+  const { error } = await supabase.from('artworks').delete().eq('id', id)
   if (error) throw error
 }
 

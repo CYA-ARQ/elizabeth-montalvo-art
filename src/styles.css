@@ -2251,6 +2251,31 @@ blockquote {
   object-fit: cover;
 }
 
+.admin-artwork-placeholder {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  aspect-ratio: 4 / 3;
+  border: 1px dashed rgba(87, 2, 52, 0.38);
+  background: rgba(181, 151, 198, 0.12);
+  color: var(--wine);
+  text-align: center;
+}
+
+.admin-artwork-placeholder span {
+  font-family: var(--display);
+  font-size: 3.5rem;
+  font-weight: 300;
+  line-height: 0.9;
+}
+
+.admin-artwork-placeholder strong {
+  margin-top: 0.55rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
 .admin-artwork > div:not(.admin-artwork-actions) {
   display: grid;
   grid-template-columns: 0.7fr 1fr;
@@ -2259,7 +2284,7 @@ blockquote {
 
 .admin-artwork-actions {
   display: grid;
-  grid-template-columns: 1fr 0.65fr;
+  grid-template-columns: 1.15fr 0.65fr 0.7fr;
   gap: 0.5rem;
 }
 
@@ -2284,6 +2309,95 @@ blockquote {
 .admin-artwork-actions button {
   background: var(--wine);
   color: #fff;
+}
+
+.admin-artwork-actions .admin-delete-button {
+  border-color: rgba(87, 2, 52, 0.42);
+  background: transparent;
+  color: var(--wine);
+}
+
+.admin-artwork-actions .admin-delete-button:hover,
+.admin-artwork-actions .admin-delete-button:focus-visible {
+  background: var(--wine);
+  color: #fff;
+}
+
+.admin-artwork-actions .admin-delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.admin-add-artwork {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.admin-add-artwork span {
+  font-family: var(--display);
+  font-size: 1.35rem;
+  font-weight: 300;
+  line-height: 0;
+}
+
+.admin-dialog-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.74);
+  backdrop-filter: blur(7px);
+}
+
+.admin-dialog {
+  width: min(31rem, 100%);
+  border-top: 3px solid var(--wine);
+  padding: clamp(1.5rem, 4vw, 2.4rem);
+  background: var(--paper);
+  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.35);
+}
+
+.admin-dialog-index {
+  color: var(--wine);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.admin-dialog h2 {
+  margin-top: 0.75rem;
+  font-family: var(--display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+.admin-dialog p {
+  margin-top: 1rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.admin-dialog > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.admin-confirm-delete {
+  border: 1px solid var(--wine);
+  padding: 0.7rem 1rem;
+  background: var(--wine);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
 }
 
 .admin-file-button input {

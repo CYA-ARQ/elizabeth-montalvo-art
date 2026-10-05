@@ -4,6 +4,7 @@ import { initialBlogPosts } from '../data/blogPosts'
 import { artworks as fallbackArtworks } from '../data/artworks'
 import { defaultSiteContent } from '../data/siteContent'
 import {
+  deleteArtworkRecord,
   isCurrentUserAdmin,
   loadAdminData,
   saveArtworkRecord,
@@ -20,6 +21,9 @@ import {
 import { Link } from '../router'
 
 const previewMode = import.meta.env.DEV && new URLSearchParams(location.search).get('preview') === '1'
+const previewSection = previewMode
+  ? new URLSearchParams(location.search).get('section')
+  : null
 
 const previewArtworks = fallbackArtworks.map((artwork, index) => ({
   id: artwork.id,
@@ -103,11 +107,12 @@ function SitePreview({ artwork, content }) {
 }
 
 function AdminDashboard({ onSignOut }) {
-  const [activeSection, setActiveSection] = useState('textos')
+  const [activeSection, setActiveSection] = useState(previewSection || 'textos')
   const [content, setContent] = useState(defaultSiteContent)
   const [artworks, setArtworks] = useState(previewArtworks)
   const [posts, setPosts] = useState(previewPosts)
   const [artworkFiles, setArtworkFiles] = useState({})
+  const [pendingArtworkDelete, setPendingArtworkDelete] = useState(null)
   const [editingPost, setEditingPost] = useState(null)
   const [postCoverFile, setPostCoverFile] = useState(null)
   const [status, setStatus] = useState(previewMode ? 'Vista previa local' : 'Cargando contenido…')
@@ -149,6 +154,37 @@ function AdminDashboard({ onSignOut }) {
     setStatus('Cambios sin guardar')
   }
 
+  const startNewArtwork = () => {
+    const nextSortOrder = artworks.reduce(
+      (highest, artwork) => Math.max(highest, artwork.sort_order ?? 0),
+      0,
+    ) + 1
+
+    setArtworks((current) => [
+      ...current,
+      {
+        id: crypto.randomUUID(),
+        title: '',
+        year: String(new Date().getFullYear()),
+        image_url: '',
+        alt_text: '',
+        categories: ['Figuración'],
+        layout: 'portrait',
+        published: true,
+        sort_order: nextSortOrder,
+        is_new: true,
+      },
+    ])
+    setStatus('Nuevo cuadro sin guardar')
+  }
+
+  const handleArtworkFileChange = (artwork, file) => {
+    if (!file) return
+    if (artwork.preview_url?.startsWith('blob:')) URL.revokeObjectURL(artwork.preview_url)
+    setArtworkFiles((current) => ({ ...current, [artwork.id]: file }))
+    updateArtwork(artwork.id, 'preview_url', URL.createObjectURL(file))
+  }
+
   const handleContentSave = async (event) => {
     event.preventDefault()
     setBusy(true)
@@ -163,6 +199,15 @@ function AdminDashboard({ onSignOut }) {
   }
 
   const handleArtworkSave = async (artwork) => {
+    if (!artwork.title.trim() || !artwork.year.trim()) {
+      setStatus('Completa el título y el año del cuadro')
+      return
+    }
+    if (!artwork.image_url && !artworkFiles[artwork.id]) {
+      setStatus('Selecciona una imagen para el nuevo cuadro')
+      return
+    }
+
     setBusy(true)
     try {
       let imageUrl = artwork.image_url
@@ -170,7 +215,7 @@ function AdminDashboard({ onSignOut }) {
       if (file && !previewMode) {
         imageUrl = await uploadPortfolioImage(file, `artworks/${artwork.id}`)
       }
-      const nextArtwork = { ...artwork, image_url: imageUrl }
+      const nextArtwork = { ...artwork, image_url: imageUrl, is_new: false }
       if (!previewMode) await saveArtworkRecord(nextArtwork)
       setArtworks((current) =>
         current.map((item) => (item.id === artwork.id ? nextArtwork : item)),
@@ -179,6 +224,33 @@ function AdminDashboard({ onSignOut }) {
       setStatus(previewMode ? 'Obra actualizada en la vista previa' : 'Obra actualizada')
     } catch {
       setStatus('No fue posible actualizar la obra')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const handleArtworkDelete = async () => {
+    if (!pendingArtworkDelete) return
+    setBusy(true)
+    try {
+      if (!previewMode && !pendingArtworkDelete.is_new) {
+        await deleteArtworkRecord(pendingArtworkDelete.id)
+      }
+      if (pendingArtworkDelete.preview_url?.startsWith('blob:')) {
+        URL.revokeObjectURL(pendingArtworkDelete.preview_url)
+      }
+      setArtworks((current) =>
+        current.filter((artwork) => artwork.id !== pendingArtworkDelete.id),
+      )
+      setArtworkFiles((current) => {
+        const nextFiles = { ...current }
+        delete nextFiles[pendingArtworkDelete.id]
+        return nextFiles
+      })
+      setPendingArtworkDelete(null)
+      setStatus(previewMode ? 'Cuadro retirado de la vista previa' : 'Cuadro eliminado')
+    } catch {
+      setStatus('No fue posible eliminar el cuadro')
     } finally {
       setBusy(false)
     }
@@ -312,11 +384,18 @@ function AdminDashboard({ onSignOut }) {
 
             {activeSection === 'galeria' ? (
               <section className="admin-section">
-                <h2>Galería</h2>
+                <div className="admin-section-heading">
+                  <h2>Galería</h2>
+                  <button className="admin-primary-button admin-add-artwork" disabled={busy} onClick={startNewArtwork} type="button"><span aria-hidden="true">＋</span> AGREGAR CUADRO</button>
+                </div>
                 <div className="admin-artwork-grid">
                   {artworks.map((artwork) => (
                     <article className="admin-artwork" key={artwork.id}>
-                      <img alt={artwork.alt_text} src={artwork.preview_url || artwork.image_url} />
+                      {artwork.preview_url || artwork.image_url ? (
+                        <img alt={artwork.alt_text} src={artwork.preview_url || artwork.image_url} />
+                      ) : (
+                        <div className="admin-artwork-placeholder"><span aria-hidden="true">＋</span><strong>Selecciona una imagen</strong></div>
+                      )}
                       <label><span>TÍTULO</span><input value={artwork.title} onChange={(event) => updateArtwork(artwork.id, 'title', event.target.value)} /></label>
                       <div>
                         <label><span>AÑO</span><input value={artwork.year} onChange={(event) => updateArtwork(artwork.id, 'year', event.target.value)} /></label>
@@ -324,8 +403,9 @@ function AdminDashboard({ onSignOut }) {
                       </div>
                       <label><span>TEXTO ALTERNATIVO</span><input value={artwork.alt_text} onChange={(event) => updateArtwork(artwork.id, 'alt_text', event.target.value)} /></label>
                       <div className="admin-artwork-actions">
-                        <label className="admin-file-button">REEMPLAZAR IMAGEN<input accept="image/jpeg,image/png,image/webp" type="file" onChange={(event) => { const file = event.target.files?.[0]; if (!file) return; setArtworkFiles((current) => ({ ...current, [artwork.id]: file })); updateArtwork(artwork.id, 'preview_url', URL.createObjectURL(file)) }} /></label>
+                        <label className="admin-file-button">{artwork.image_url ? 'REEMPLAZAR IMAGEN' : 'SELECCIONAR IMAGEN'}<input accept="image/jpeg,image/png,image/webp" type="file" onChange={(event) => handleArtworkFileChange(artwork, event.target.files?.[0])} /></label>
                         <button disabled={busy} onClick={() => handleArtworkSave(artwork)} type="button">GUARDAR</button>
+                        <button className="admin-delete-button" disabled={busy || artworks.length <= 1} onClick={() => setPendingArtworkDelete(artwork)} title={artworks.length <= 1 ? 'Debe quedar al menos un cuadro' : undefined} type="button">ELIMINAR</button>
                       </div>
                     </article>
                   ))}
@@ -364,6 +444,20 @@ function AdminDashboard({ onSignOut }) {
           <SitePreview artwork={featuredArtwork} content={content} />
         </div>
       </section>
+
+      {pendingArtworkDelete ? (
+        <div className="admin-dialog-backdrop" role="presentation">
+          <section aria-describedby="delete-artwork-description" aria-labelledby="delete-artwork-title" aria-modal="true" className="admin-dialog" role="alertdialog">
+            <span className="admin-dialog-index">GALERÍA / ELIMINAR</span>
+            <h2 id="delete-artwork-title">¿Eliminar “{pendingArtworkDelete.title || 'este cuadro'}”?</h2>
+            <p id="delete-artwork-description">Dejará de aparecer en la galería pública. La imagen original se conservará para poder recuperarla.</p>
+            <div>
+              <button autoFocus className="admin-secondary-button" onClick={() => setPendingArtworkDelete(null)} type="button">CANCELAR</button>
+              <button className="admin-confirm-delete" disabled={busy} onClick={handleArtworkDelete} type="button">{busy ? 'ELIMINANDO…' : 'ELIMINAR CUADRO'}</button>
+            </div>
+          </section>
+        </div>
+      ) : null}
     </main>
   )
 }
