@@ -2458,7 +2458,16 @@ blockquote {
   }
 
   .admin-sidebar-actions {
-    display: none;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.1rem;
+    margin-top: 0.65rem;
+    padding-top: 0.75rem;
+  }
+
+  .admin-sidebar-actions a,
+  .admin-sidebar-actions button {
+    font-size: 0.52rem;
   }
 
   .admin-workspace {
