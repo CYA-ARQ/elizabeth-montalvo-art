@@ -3,6 +3,9 @@ dist/
 .tools-ffmpeg/
 .DS_Store
 *.log
+.env
+.env.local
+.env.production
 
 # Recursos reemplazados o no utilizados
 public/about/elizabeth-montalvo.png

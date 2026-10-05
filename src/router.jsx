@@ -46,7 +46,8 @@ export function Link({ children, onClick, to, ...props }) {
       event.metaKey ||
       event.ctrlKey ||
       event.shiftKey ||
-      event.altKey
+      event.altKey ||
+      (event.currentTarget.target && event.currentTarget.target !== '_self')
     ) {
       return
     }

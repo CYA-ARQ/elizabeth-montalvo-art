@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import ArtworkCard from '../components/ArtworkCard'
 import Lightbox from '../components/Lightbox'
-import { artworks, galleryFilters } from '../data/artworks'
+import { useSiteContent } from '../content/ContentContext'
+import { galleryFilters } from '../data/artworks'
 
 export default function GalleryPage() {
+  const { artworks } = useSiteContent()
   const [activeFilter, setActiveFilter] = useState('Todas')
   const [activeArtworkId, setActiveArtworkId] = useState(null)
 

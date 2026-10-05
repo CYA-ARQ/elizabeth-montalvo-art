@@ -1,8 +1,11 @@
 import ArrowIcon from '../components/ArrowIcon'
 import { assetUrl } from '../assetUrl'
+import { useSiteContent } from '../content/ContentContext'
 import { Link } from '../router'
 
 export default function AboutPage() {
+  const { siteContent } = useSiteContent()
+
   return (
     <>
       <section className="about-hero">
@@ -21,24 +24,12 @@ export default function AboutPage() {
             src={assetUrl('/brand/logo-elizabeth-montalvo.png')}
           />
           <h1>Sobre mí</h1>
-          <p className="about-lead">
-            Pinto para escuchar lo que las palabras no alcanzan.
-          </p>
+          <p className="about-lead">{siteContent.aboutLead}</p>
           <div className="about-body">
-            <p>
-              Soy Martha Montalvo. Mi práctica artística nace de la observación
-              atenta de la vida cotidiana, la memoria y la naturaleza. Me interesa
-              lo que permanece en silencio: gestos mínimos, miradas, texturas y
-              luces que cambian sin avisar.
-            </p>
-            <p>
-              Trabajo la figura humana y el paisaje como territorios emocionales.
-              El cuerpo, en toda su fragilidad y fuerza, es un lugar donde se
-              cruzan lo personal y lo universal. Pinto para comprender, acompañar
-              y recordar lo esencial.
-            </p>
+            <p>{siteContent.aboutParagraphOne}</p>
+            <p>{siteContent.aboutParagraphTwo}</p>
           </div>
-          <p className="practice-line">Pintura figurativa · Técnica mixta</p>
+          <p className="practice-line">{siteContent.practiceLine}</p>
         </div>
         <img
           alt=""

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { assetUrl } from '../assetUrl'
 import ArrowIcon from '../components/ArrowIcon'
-import { artworks } from '../data/artworks'
+import { useSiteContent } from '../content/ContentContext'
 import { Link } from '../router'
 
-const selectedWorks = artworks.filter((artwork) =>
-  ['el-vuelo', 'ritual'].includes(artwork.id),
-)
-
-const heroSlides = ['ritual', 'el-vuelo', 'el-origen', 'marea-interior'].map(
-  (id) => artworks.find((artwork) => artwork.id === id),
-)
-
 const SLIDE_DURATION = 3800
+const heroOrder = ['ritual', 'el-vuelo', 'el-origen', 'marea-interior']
 
 export default function HomePage() {
+  const { artworks, siteContent } = useSiteContent()
+  const selectedWorks = artworks.filter((artwork) =>
+    ['el-vuelo', 'ritual'].includes(artwork.id),
+  )
+  const heroSlides = heroOrder
+    .map((id) => artworks.find((artwork) => artwork.id === id))
+    .filter(Boolean)
   const [{ activeIndex, previousIndex }, setSlideState] = useState({
     activeIndex: 0,
     previousIndex: null,
@@ -88,15 +88,13 @@ export default function HomePage() {
           <div className="cinematic-copy">
             <p className="art-index">MARTHA MONTALVO / OBRA EN MOVIMIENTO</p>
             <h1
-              aria-label="La pintura como expresión más allá de las palabras."
+              aria-label={`${siteContent.heroTitleLine1} ${siteContent.heroTitleLine2}`}
               id="home-title"
             >
-              <span>La pintura como expresión</span>
-              <span>más allá de las palabras.</span>
+              <span>{siteContent.heroTitleLine1}</span>
+              <span>{siteContent.heroTitleLine2}</span>
             </h1>
-            <p className="hero-lead">
-              Cuerpo, memoria, inconsciente y naturaleza en obras que transmiten lo íntimo.
-            </p>
+            <p className="hero-lead">{siteContent.heroLead}</p>
             <Link className="text-link text-link--cinematic" to="/galeria">
               VER GALERÍA <ArrowIcon />
             </Link>
@@ -111,10 +109,11 @@ export default function HomePage() {
 
           <div className="cinematic-controls" aria-label="Controles de la animación">
             <span aria-live="polite">
-              {String(currentFrame).padStart(2, '0')} <i>/</i> 04
+              {String(currentFrame).padStart(2, '0')} <i>/</i>{' '}
+              {String(heroSlides.length).padStart(2, '0')}
             </span>
             <span className="cinematic-progress" aria-hidden="true">
-              <i style={{ transform: `scaleX(${currentFrame / 4})` }} />
+              <i style={{ transform: `scaleX(${currentFrame / heroSlides.length})` }} />
             </span>
             <button
               aria-label={isPlaying ? 'Pausar animación' : 'Reproducir animación'}

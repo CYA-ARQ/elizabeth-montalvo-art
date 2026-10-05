@@ -1,0 +1,91 @@
+import { supabase } from './supabase'
+
+export async function isCurrentUserAdmin(userId) {
+  const { data, error } = await supabase
+    .from('admin_users')
+    .select('user_id')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (error) throw error
+  return Boolean(data)
+}
+
+export async function loadAdminData() {
+  const [contentResult, artworksResult, postsResult] = await Promise.all([
+    supabase.from('site_content').select('value').eq('id', 'main').single(),
+    supabase.from('artworks').select('*').order('sort_order'),
+    supabase.from('blog_posts').select('*').order('published_at', { ascending: false }),
+  ])
+
+  const firstError = contentResult.error || artworksResult.error || postsResult.error
+  if (firstError) throw firstError
+
+  return {
+    content: contentResult.data.value,
+    artworks: artworksResult.data,
+    posts: postsResult.data,
+  }
+}
+
+export async function saveSiteContent(value) {
+  const { error } = await supabase
+    .from('site_content')
+    .upsert({ id: 'main', value, updated_at: new Date().toISOString() })
+  if (error) throw error
+}
+
+export async function saveArtworkRecord(artwork) {
+  const { error } = await supabase
+    .from('artworks')
+    .update({
+      title: artwork.title,
+      year: artwork.year,
+      alt_text: artwork.alt_text,
+      categories: artwork.categories,
+      layout: artwork.layout,
+      image_url: artwork.image_url,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', artwork.id)
+  if (error) throw error
+}
+
+export async function saveBlogPost(post) {
+  const record = {
+    id: post.id,
+    title: post.title,
+    slug: post.slug,
+    category: post.category,
+    excerpt: post.excerpt,
+    body: post.body,
+    cover_url: post.cover_url,
+    published: post.published,
+    published_at: post.published_at,
+    updated_at: new Date().toISOString(),
+  }
+  const { error } = await supabase.from('blog_posts').upsert(record)
+  if (error) throw error
+}
+
+export async function uploadPortfolioImage(file, folder) {
+  const extension = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+  const safeFolder = folder.replace(/[^a-z0-9/-]/gi, '-')
+  const path = `${safeFolder}/${Date.now()}-${crypto.randomUUID()}.${extension}`
+  const { error } = await supabase.storage
+    .from('portfolio-media')
+    .upload(path, file, { cacheControl: '3600', upsert: false })
+
+  if (error) throw error
+  return supabase.storage.from('portfolio-media').getPublicUrl(path).data.publicUrl
+}
+
+export function slugify(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
