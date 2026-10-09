@@ -199,7 +199,7 @@ function AdminDashboard({ onSignOut }) {
       )
     } catch (error) {
       setStatus(
-        error?.name === 'AbortError'
+        error?.name === 'AbortError' || error?.name === 'TimeoutError'
           ? 'La conexión tardó demasiado. Intenta guardar nuevamente.'
           : 'No fue posible guardar los textos',
       )
@@ -487,6 +487,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (!supabase || previewMode) return undefined
     let ignore = false
+    let verificationTimer = null
 
     const verifySession = async (session) => {
       if (!session?.user) {
@@ -505,10 +506,20 @@ export default function AdminPage() {
       }
     }
 
-    supabase.auth.getSession().then(({ data }) => verifySession(data.session))
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => verifySession(session))
+    const scheduleVerification = (session) => {
+      window.clearTimeout(verificationTimer)
+      verificationTimer = window.setTimeout(() => {
+        if (!ignore) void verifySession(session)
+      }, 0)
+    }
+
+    supabase.auth.getSession().then(({ data }) => scheduleVerification(data.session))
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      scheduleVerification(session)
+    })
     return () => {
       ignore = true
+      window.clearTimeout(verificationTimer)
       data.subscription.unsubscribe()
     }
   }, [])

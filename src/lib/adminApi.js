@@ -4,32 +4,59 @@ const REQUEST_TIMEOUT_MS = 12000
 
 async function runWithTimeout(createQuery) {
   const controller = new AbortController()
-  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+  let timeout
+
+  const timeoutPromise = new Promise((_, reject) => {
+    timeout = window.setTimeout(() => {
+      controller.abort()
+      const error = new Error('La solicitud tardó demasiado')
+      error.name = 'TimeoutError'
+      reject(error)
+    }, REQUEST_TIMEOUT_MS)
+  })
 
   try {
-    return await createQuery(controller.signal)
+    return await Promise.race([
+      Promise.resolve(createQuery(controller.signal)),
+      timeoutPromise,
+    ])
   } finally {
     window.clearTimeout(timeout)
   }
 }
 
 export async function isCurrentUserAdmin(userId) {
-  const { data, error } = await supabase
-    .from('admin_users')
-    .select('user_id')
-    .eq('user_id', userId)
-    .maybeSingle()
+  const { data, error } = await runWithTimeout((signal) =>
+    supabase
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle()
+      .abortSignal(signal),
+  )
 
   if (error) throw error
   return Boolean(data)
 }
 
 export async function loadAdminData() {
-  const [contentResult, artworksResult, postsResult] = await Promise.all([
-    supabase.from('site_content').select('value').eq('id', 'main').single(),
-    supabase.from('artworks').select('*').order('sort_order'),
-    supabase.from('blog_posts').select('*').order('published_at', { ascending: false }),
-  ])
+  const [contentResult, artworksResult, postsResult] = await runWithTimeout(
+    (signal) =>
+      Promise.all([
+        supabase
+          .from('site_content')
+          .select('value')
+          .eq('id', 'main')
+          .single()
+          .abortSignal(signal),
+        supabase.from('artworks').select('*').order('sort_order').abortSignal(signal),
+        supabase
+          .from('blog_posts')
+          .select('*')
+          .order('published_at', { ascending: false })
+          .abortSignal(signal),
+      ]),
+  )
 
   const firstError = contentResult.error || artworksResult.error || postsResult.error
   if (firstError) throw firstError
