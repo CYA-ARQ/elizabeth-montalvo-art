@@ -3,6 +3,7 @@ import { assetUrl } from '../assetUrl'
 import { initialBlogPosts } from '../data/blogPosts'
 import { artworks as fallbackArtworks } from '../data/artworks'
 import { defaultSiteContent } from '../data/siteContent'
+import { announceContentRefresh } from '../content/ContentContext'
 import {
   deleteArtworkRecord,
   isCurrentUserAdmin,
@@ -190,9 +191,18 @@ function AdminDashboard({ onSignOut }) {
     setBusy(true)
     try {
       if (!previewMode) await saveSiteContent(content)
-      setStatus(previewMode ? 'Cambios aplicados en la vista previa' : 'Cambios guardados')
-    } catch {
-      setStatus('No fue posible guardar los textos')
+      if (!previewMode) announceContentRefresh()
+      setStatus(
+        previewMode
+          ? 'Cambios aplicados en la vista previa'
+          : 'Cambios guardados · web actualizada',
+      )
+    } catch (error) {
+      setStatus(
+        error?.name === 'AbortError'
+          ? 'La conexión tardó demasiado. Intenta guardar nuevamente.'
+          : 'No fue posible guardar los textos',
+      )
     } finally {
       setBusy(false)
     }
@@ -346,7 +356,12 @@ function AdminDashboard({ onSignOut }) {
       <section className="admin-workspace">
         <header className="admin-workspace-header">
           <h1>Panel de Martha</h1>
-          <p className={status.includes('No fue') ? 'is-error' : ''}>{status}</p>
+          <p
+            aria-live="polite"
+            className={status.includes('No fue') || status.includes('tardó') ? 'is-error' : ''}
+          >
+            {status}
+          </p>
         </header>
 
         <div className="admin-workspace-grid">
@@ -378,7 +393,7 @@ function AdminDashboard({ onSignOut }) {
                   <label className="admin-field-wide"><span>BIOGRAFÍA — PÁRRAFO 1</span><textarea rows="5" value={content.aboutParagraphOne} onChange={(event) => setContent({ ...content, aboutParagraphOne: event.target.value })} /></label>
                   <label className="admin-field-wide"><span>BIOGRAFÍA — PÁRRAFO 2</span><textarea rows="5" value={content.aboutParagraphTwo} onChange={(event) => setContent({ ...content, aboutParagraphTwo: event.target.value })} /></label>
                 </div>
-                <button className="admin-primary-button" disabled={busy} type="submit">GUARDAR CAMBIOS</button>
+                <button aria-busy={busy} className="admin-primary-button" disabled={busy} type="submit">{busy ? 'GUARDANDO…' : 'GUARDAR CAMBIOS'}</button>
               </form>
             ) : null}
 

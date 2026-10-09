@@ -1,5 +1,18 @@
 import { supabase } from './supabase'
 
+const REQUEST_TIMEOUT_MS = 12000
+
+async function runWithTimeout(createQuery) {
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+  try {
+    return await createQuery(controller.signal)
+  } finally {
+    window.clearTimeout(timeout)
+  }
+}
+
 export async function isCurrentUserAdmin(userId) {
   const { data, error } = await supabase
     .from('admin_users')
@@ -29,10 +42,17 @@ export async function loadAdminData() {
 }
 
 export async function saveSiteContent(value) {
-  const { error } = await supabase
-    .from('site_content')
-    .upsert({ id: 'main', value, updated_at: new Date().toISOString() })
+  const { data, error } = await runWithTimeout((signal) =>
+    supabase
+      .from('site_content')
+      .update({ value, updated_at: new Date().toISOString() })
+      .eq('id', 'main')
+      .select('updated_at')
+      .single()
+      .abortSignal(signal),
+  )
   if (error) throw error
+  if (!data) throw new Error('No se confirmó la actualización del contenido')
 }
 
 export async function saveArtworkRecord(artwork) {
