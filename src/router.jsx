@@ -1,6 +1,9 @@
 import { useSyncExternalStore } from 'react'
 
-const useHashRouting = import.meta.env.PROD && import.meta.env.BASE_URL !== '/'
+// GitHub Pages does not provide an SPA fallback for direct route requests.
+// Keep hash navigation in production so every page resolves through index.html,
+// including when the site is served from its custom domain root.
+const useHashRouting = import.meta.env.PROD
 
 function subscribe(callback) {
   window.addEventListener('popstate', callback)
