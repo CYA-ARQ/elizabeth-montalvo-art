@@ -129,18 +129,18 @@ blockquote {
 .site-header--dark .brand-lockup {
   width: auto;
   flex-direction: row;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .site-header--dark .brand-logo {
-  width: clamp(76px, 5.8vw, 96px);
+  width: clamp(96px, 7.2vw, 124px);
   mix-blend-mode: normal;
 }
 
 .site-header--dark .brand-lockup span {
   color: #f5f1e8;
   font-family: var(--sans);
-  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.22vw, 1.28rem);
   letter-spacing: 0.14em;
   text-transform: none;
 }
@@ -173,16 +173,16 @@ blockquote {
 .site-header--compact .brand-lockup {
   width: auto;
   flex-direction: row;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .site-header--compact .brand-logo {
-  width: clamp(76px, 5.8vw, 96px);
+  width: clamp(96px, 7.2vw, 124px);
 }
 
 .site-header--compact .brand-lockup span {
   font-family: var(--sans);
-  font-size: clamp(0.82rem, 1vw, 1rem);
+  font-size: clamp(1rem, 1.22vw, 1.28rem);
   letter-spacing: 0.14em;
   text-transform: none;
 }
@@ -2695,15 +2695,15 @@ blockquote {
   }
 
   .brand-logo {
-    width: 48px;
+    width: 60px;
   }
 
   .site-header--dark .brand-logo {
-    width: 48px;
+    width: 60px;
   }
 
   .site-header--compact .brand-logo {
-    width: 48px;
+    width: 60px;
   }
 
   .site-header--compact .brand-lockup {
@@ -2711,11 +2711,11 @@ blockquote {
   }
 
   .site-header--compact .brand-lockup span {
-    font-size: 0.82rem;
+    font-size: 0.92rem;
   }
 
   .brand-lockup span {
-    font-size: 0.82rem;
+    font-size: 0.92rem;
   }
 
   .menu-toggle {
@@ -3039,14 +3039,14 @@ blockquote {
 
   .site-header--dark .brand-lockup span {
     max-width: 9.5rem;
-    font-size: 0.69rem;
+    font-size: 0.86rem;
     letter-spacing: 0.12em;
     white-space: normal;
   }
 
   .site-header--compact .brand-lockup span {
     max-width: 9.5rem;
-    font-size: 0.69rem;
+    font-size: 0.86rem;
     letter-spacing: 0.12em;
     white-space: normal;
   }
